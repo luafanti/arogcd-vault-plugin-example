@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: argocd-vault-secret-example
+  annotations:
+    avp.kubernetes.io/path: "dog-kv-v2/data/credentials"
+spec:
+  containers:
+    - image: nginx:latest
+      name: nginx
+      env:
+      - name: USERNAME
+        value: <user>
+      - name: PASSWORD
+        value: <password>
