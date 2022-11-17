@@ -1,15 +1,26 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: argocd-vault-secret-example
+  name: argocd-vault-deployment-example
   annotations:
     avp.kubernetes.io/path: "dog-kv-v2/data/credentials"
+  labels:
+    app: argocd-demo
 spec:
-  containers:
-    - image: nginx:latest
-      name: nginx
-      env:
-      - name: USERNAME
-        value: <user>
-      - name: PASSWORD
-        value: <password>
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argocd-demo
+  template:
+    metadata:
+      labels:
+        app: argocd-demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        env:
+        - name: USERNAME
+          value: <user>
+        - name: PASSWORD
+          value: <password>
