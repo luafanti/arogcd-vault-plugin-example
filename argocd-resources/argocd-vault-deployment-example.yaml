@@ -24,3 +24,6 @@ spec:
           value: <user>
         - name: PASSWORD
           value: <password>
+        envFrom:
+        - secretRef:
+            name: argocd-vault-dynamic-secret-example
