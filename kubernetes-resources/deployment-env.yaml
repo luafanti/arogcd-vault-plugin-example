@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: argocd-vault-deployment-example
+  name: deployment-env-demo
   annotations:
     avp.kubernetes.io/path: "dog-kv-v2/data/credentials"
   labels:
-    app: argocd-demo
+    app: deployment-env-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: argocd-demo
+      app: deployment-env-demo
   template:
     metadata:
       labels:
-        app: argocd-demo
+        app: deployment-env-demo
     spec:
       containers:
       - name: nginx
