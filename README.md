@@ -18,18 +18,20 @@ Easiest way to install ArgoCD is using Helm chart. Install it with helm in dedic
 ```
 kubectl create ns argocd
 kubectl config set-context --current --namespace=argocd
+
+helm repo add argo https://argoproj.github.io/argo-helm
 helm install argo-cd argo/argo-cd
 ```
 
 #### Argo CD Vault Plugin installation
 
-You can install `argocd-vault-plugin` on two different ways. 
+You can install `argocd-vault-plugin` on two different ways:
 
 * Installation via `argocd-cm` ConfigMap
 * Installation via a sidecar container 
 
 Let's focus here on installation with `argocd-cm`
-To install plugin we need to create & update few Argo CD kubernetes resources create by Helm char.
+To install plugin we need to create & update few Argo kubernetes resources create by Helm chat.
 
 For `argocd-cm-installation/argocd-vault-plugin-credentials.yaml` you have to provide your Vault `approle` credentials and IP address of Vault instance in k8s.
 ```
@@ -42,13 +44,13 @@ kubectl delete deployments.apps argo-cd-argocd-repo-server
 kubectl apply -f argocd-cm-installation/argocd-repo-server.yaml
 ```
 
-Instead, deleting and applying new YAML's you can also edit manifest comparing diffs YAML's under `argocd-cm-installation/`.
-Now `argocd-vault-plugin` has benn installed. 
+Instead, deleting and applying new YAML's you can also edit manifest comparing diffs under `argocd-cm-installation/`.
+Now `argocd-vault-plugin` has been installed. 
 
 
 ## Demo project setup
 
-You can create Argo CD app in UI or with CLI as below
+You can create Argo CD app in UI or with CLI as below:
 
 ```
 # create dedicated namespace for demo resources
@@ -58,7 +60,7 @@ kubectl create ns argocd-vault-demo
 kubectl port-forward svc/argo-cd-argocd-server 8080:80  -n argocd
 
 # authroize Argo CD CLI
-argocd login localhost:8080 --username aqdmin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+argocd login localhost:8080 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
 # create Argo CD app with demo k8s resources
 argocd app create argocd-vault-plugin-demo --repo https://github.com/luafanti/arogcd-vault-plugin-example.git --path kubernetes-resources --dest-namespace argocd-vault-demo --dest-server https://kubernetes.default.svc --config-management-plugin argocd-vault-plugin
@@ -68,7 +70,7 @@ argocd app sync argocd-vault-plugin-demo
 ```
 
 Now you should see in `argocd-vault-demo` namespace two deployments and one secret created and controlled by Argo CD. 
-One of the great things about the plugin is that if the value changes in Vault Argo will notice these changes and display `OutOfSync` status
+One of the great things about the plugin is that if the value changes in Vault Argo will notice these changes and display `OutOfSync` status.
 
 ```
 # update kv in Vault
